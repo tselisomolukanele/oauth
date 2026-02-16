@@ -8,6 +8,7 @@ require_once('../repository/ScopeRepository.php');
 require_once('../repository/AccessTokenRepository.php');
 require_once('../repository/AuthCodeRepository.php');
 require_once('../repository/RefreshTokenRepository.php');
+require_once('../middleware/CorsMiddleware.php');
 
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Grant\AuthCodeGrant;
@@ -50,5 +51,7 @@ $app = new App([
         'displayErrorDetails' => true,
     ],
 ]);
+
+$app->add(new CorsMiddleware(['http://localhost:8081']));
 
 ?>
