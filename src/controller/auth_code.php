@@ -7,7 +7,13 @@ use Laminas\Diactoros\Stream;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-$app->get('/authorize', function (ServerRequestInterface $request, ResponseInterface $response) use ($server) {
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
+$logger = new Logger('name');
+$logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
+
+$app->get('/authorize', function (ServerRequestInterface $request, ResponseInterface $response) use ($server, $logger) {
 
     try {
         // Validate the HTTP request and return an AuthorizationRequest object.
@@ -27,6 +33,7 @@ $app->get('/authorize', function (ServerRequestInterface $request, ResponseInter
 
         return $exception->generateHttpResponse($response);
     } catch (Exception $exception) {
+        $logger->error('Error: ' . $exception->getMessage());
         $body = new Stream('php://temp', 'r+');
         $body->write($exception->getMessage());
 

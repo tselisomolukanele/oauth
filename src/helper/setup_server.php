@@ -13,7 +13,7 @@ use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Grant\AuthCodeGrant;
 use Slim\App;
 
-$privateKeyPath = 'C:\\workspace\\config\\oauth.private.key';
+$privateKeyPath = '/home/tseliso/workspace/config/oauth.private.key';
 $encryptionKey = 'Gx5M5Nr2L2vir1VKg3DkOZ1ywYBosKBfrcpc9vwiTP0=';
 
 function getServer($privateKeyPath, $encryptionKey) {
