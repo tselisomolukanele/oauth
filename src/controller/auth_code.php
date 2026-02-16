@@ -15,22 +15,41 @@ $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
 
 $app->get('/authorize', function (ServerRequestInterface $request, ResponseInterface $response) use ($server, $logger) {
 
+
+    $logger->info('Authorize request received');
+    $logger->info('User ID: ' . $_SESSION['user_id']);  
+
+    // If the user is not logged in, validate and store the authorization
+    // request, then show the login screen.
+    if (empty($_SESSION['user_id'])) {
+        $logger->info('User not logged in, redirecting to login');
+        try {
+            $authRequest = $server->validateAuthorizationRequest($request);
+            $_SESSION['authRequest'] = serialize($authRequest);
+
+            // Redirect to the login route which will show the login form.
+            return $response
+                ->withStatus(302)
+                ->withHeader('Location', '/login');
+        } catch (OAuthServerException $exception) {
+            return $exception->generateHttpResponse($response);
+        } catch (Exception $exception) {
+            $body = new Stream('php://temp', 'r+');
+            $body->write($exception->getMessage());
+
+            return $response->withStatus(500)->withBody($body);
+        }
+    }
+
+    // User is already logged in; continue the normal authorization flow.
     try {
-        // Validate the HTTP request and return an AuthorizationRequest object.
-        // The auth request object can be serialized into a user's session
         $authRequest = $server->validateAuthorizationRequest($request);
 
-        // Once the user has logged in set the user on the AuthorizationRequest
-        $authRequest->setUser(new UserEntity());
-
-        // Once the user has approved or denied the client update the status
-        // (true = approved, false = denied)
+        $authRequest->setUser(new UserEntity((string) $_SESSION['user_id']));
         $authRequest->setAuthorizationApproved(true);
 
-        // Return the HTTP redirect response
         return $server->completeAuthorizationRequest($authRequest, $response);
     } catch (OAuthServerException $exception) {
-
         return $exception->generateHttpResponse($response);
     } catch (Exception $exception) {
         $logger->error('Error: ' . $exception->getMessage());
