@@ -10,7 +10,7 @@ use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 class ClientRepository implements ClientRepositoryInterface
 {
     private const CLIENT_NAME = 'THE_CLIENT_ID';
-    private const REDIRECT_URI = 'http://foo/bar';
+    private const REDIRECT_URI = 'http://localhost:8081/callback';
 
     public function getClientEntity($clientIdentifier): ?ClientEntityInterface
     {

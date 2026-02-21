@@ -8,12 +8,13 @@ require_once('../repository/ScopeRepository.php');
 require_once('../repository/AccessTokenRepository.php');
 require_once('../repository/AuthCodeRepository.php');
 require_once('../repository/RefreshTokenRepository.php');
+require_once('../middleware/CorsMiddleware.php');
 
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Grant\AuthCodeGrant;
 use Slim\App;
 
-$privateKeyPath = 'C:\\workspace\\config\\oauth.private.key';
+$privateKeyPath = '/home/tseliso/workspace/config/oauth.private.key';
 $encryptionKey = 'Gx5M5Nr2L2vir1VKg3DkOZ1ywYBosKBfrcpc9vwiTP0=';
 
 function getServer($privateKeyPath, $encryptionKey) {
@@ -50,5 +51,7 @@ $app = new App([
         'displayErrorDetails' => true,
     ],
 ]);
+
+$app->add(new CorsMiddleware(['http://localhost:8081']));
 
 ?>
