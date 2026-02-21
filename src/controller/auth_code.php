@@ -16,7 +16,6 @@ $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
 
 $app->get('/authorize', function (ServerRequestInterface $request, ResponseInterface $response) use ($server, $logger) {
 
-
     $logger->info('Authorize request received');
     $logger->info('User ID: ' . $_SESSION['user_id']);  
 

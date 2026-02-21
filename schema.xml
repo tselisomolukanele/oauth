@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="oauth" defaultIdMethod="native" namespace="OAuth\Model">
+    <table name="oauth_client" phpName="OauthClient">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
+        <column name="identifier" type="varchar" size="255" required="true"/>
+        <column name="secret" type="varchar" size="255" required="false"/>
+        <column name="name" type="varchar" size="255" required="true"/>
+        <column name="redirect_uri" type="varchar" size="512" required="true"/>
+        <column name="is_confidential" type="boolean" required="true" defaultValue="false"/>
+        <unique name="oauth_client_identifier_uq">
+            <unique-column name="identifier"/>
+        </unique>
+    </table>
+</database>

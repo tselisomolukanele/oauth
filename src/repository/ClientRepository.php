@@ -2,50 +2,60 @@
 
 declare(strict_types=1);
 
-require_once('../entity/ClientEntity.php');
+require_once __DIR__ . '/../entity/ClientEntity.php';
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
+use Propel\Runtime\Propel;
 
 class ClientRepository implements ClientRepositoryInterface
 {
-    private const CLIENT_NAME = 'THE_CLIENT_ID';
-    private const REDIRECT_URI = 'http://localhost:8081/callback';
+    private const TABLE_NAME = 'oauth_client';
 
     public function getClientEntity($clientIdentifier): ?ClientEntityInterface
     {
-        $client = new ClientEntity();
+        $row = $this->findClientByIdentifier((string) $clientIdentifier);
+        if ($row === null) {
+            return null;
+        }
 
-        $client->setIdentifier($clientIdentifier);
-        $client->setName(self::CLIENT_NAME);
-        $client->setRedirectUri(self::REDIRECT_URI);
-        $client->setConfidential();
+        $client = new ClientEntity();
+        $client->setIdentifier($row['identifier']);
+        $client->setName($row['name']);
+        $client->setRedirectUri($row['redirect_uri']);
+        if (!empty($row['is_confidential'])) {
+            $client->setConfidential();
+        }
 
         return $client;
     }
 
     public function validateClient($clientIdentifier, $clientSecret, $grantType): bool
     {
-        $clients = [
-            'THE_CLIENT_ID' => [
-                'secret'          => password_hash('abc123', PASSWORD_BCRYPT),
-                'name'            => self::CLIENT_NAME,
-                'redirect_uri'    => self::REDIRECT_URI,
-                'is_confidential' => true,
-            ],
-        ];
-
-        // Check if client is registered
-        if (array_key_exists($clientIdentifier, $clients) === false) {
+        $row = $this->findClientByIdentifier((string) $clientIdentifier);
+        if ($row === null) {
             return false;
         }
 
-        if (password_verify($clientSecret, $clients[$clientIdentifier]['secret']) === false) {
+        if (empty($row['secret'])) {
             return false;
         }
 
-        return true;
+        return password_verify($clientSecret, $row['secret']);
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    private function findClientByIdentifier(string $identifier): ?array
+    {
+        $con = Propel::getServiceContainer()->getReadConnection('oauth');
+        $stmt = $con->prepare(
+            'SELECT id, identifier, secret, name, redirect_uri, is_confidential FROM ' . self::TABLE_NAME . ' WHERE identifier = :identifier LIMIT 1'
+        );
+        $stmt->execute(['identifier' => $identifier]);
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        return $row ?: null;
     }
 }
-
-?>
