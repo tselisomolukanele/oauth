@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-require_once('../../vendor/autoload.php');
-require_once('../repository/ClientRepository.php');
+require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../../generated-conf/config.php';
+require_once __DIR__ . '/../repository/ClientRepository.php';
 require_once('../repository/ScopeRepository.php');
 require_once('../repository/AccessTokenRepository.php');
 require_once('../repository/AuthCodeRepository.php');
