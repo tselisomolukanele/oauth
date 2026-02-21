@@ -4,6 +4,7 @@ require_once('../../vendor/autoload.php');
 require_once('../entity/UserEntity.php');
 
 use Laminas\Diactoros\Stream;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
