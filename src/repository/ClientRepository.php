@@ -10,7 +10,10 @@ use Propel\Runtime\Propel;
 
 class ClientRepository implements ClientRepositoryInterface
 {
-    private const TABLE_NAME = 'oauth_client';
+    private function getTableName(): string
+    {
+        return $_ENV['OAUTH_CLIENT_TABLE'] ?? 'oauth_client';
+    }
 
     public function getClientEntity($clientIdentifier): ?ClientEntityInterface
     {
@@ -50,8 +53,9 @@ class ClientRepository implements ClientRepositoryInterface
     private function findClientByIdentifier(string $identifier): ?array
     {
         $con = Propel::getServiceContainer()->getReadConnection('oauth');
+        $table = $this->getTableName();
         $stmt = $con->prepare(
-            'SELECT id, identifier, secret, name, redirect_uri, is_confidential FROM ' . self::TABLE_NAME . ' WHERE identifier = :identifier LIMIT 1'
+            'SELECT id, identifier, secret, name, redirect_uri, is_confidential FROM ' . $table . ' WHERE identifier = :identifier LIMIT 1'
         );
         $stmt->execute(['identifier' => $identifier]);
         $row = $stmt->fetch(\PDO::FETCH_ASSOC);

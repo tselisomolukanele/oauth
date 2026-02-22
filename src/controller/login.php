@@ -60,9 +60,8 @@ $app->post('/login', function (ServerRequestInterface $request, ResponseInterfac
     $username = $params['username'] ?? '';
     $password = $params['password'] ?? '';
 
-    // Very simple hard-coded credentials for demo purposes.
-    $validUsername = 'user';
-    $validPassword = 'password';
+    $validUsername = $_ENV['LOGIN_USERNAME'] ?? 'user';
+    $validPassword = $_ENV['LOGIN_PASSWORD'] ?? 'password';
 
     if ($username !== $validUsername || $password !== $validPassword) {
         $body = new Stream('php://temp', 'r+');
