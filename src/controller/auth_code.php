@@ -1,7 +1,7 @@
 <?php
 
-require_once('../../vendor/autoload.php');
-require_once('../entity/UserEntity.php');
+require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../entity/UserEntity.php';
 
 use Laminas\Diactoros\Stream;
 use League\OAuth2\Server\Exception\OAuthServerException;
@@ -14,10 +14,7 @@ use Monolog\Handler\StreamHandler;
 $logger = new Logger('name');
 $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
 
-$app->get('/authorize', function (ServerRequestInterface $request, ResponseInterface $response) use ($server, $logger) {
-
-    $logger->info('Authorize request received');
-    $logger->info('User ID: ' . $_SESSION['user_id']);  
+$app->get('/authorize', function (ServerRequestInterface $request, ResponseInterface $response) use ($server, $logger) { 
 
     // If the user is not logged in, validate and store the authorization
     // request, then show the login screen.

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once('../entity/RefreshTokenEntity.php');
+require_once __DIR__ . '/../entity/RefreshTokenEntity.php';
 
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;

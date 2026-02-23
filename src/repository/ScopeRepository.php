@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once('../entity/ScopeEntity.php');
+require_once __DIR__ . '/../entity/ScopeEntity.php';
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
