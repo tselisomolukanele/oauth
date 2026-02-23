@@ -1,7 +1,7 @@
 <?php
 
-require_once('../../vendor/autoload.php');
-require_once('../entity/UserEntity.php');
+require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../entity/UserEntity.php';
 
 use Laminas\Diactoros\Stream;
 use League\OAuth2\Server\Exception\OAuthServerException;

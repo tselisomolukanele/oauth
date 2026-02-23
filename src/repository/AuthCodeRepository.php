@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once('../entity/AuthCodeEntity.php');
+require_once __DIR__ . '/../entity/AuthCodeEntity.php';
 
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;

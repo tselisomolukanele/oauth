@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once('../entity/AccessTokenEntity.php');
+require_once __DIR__ . '/../entity/AccessTokenEntity.php';
 
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
